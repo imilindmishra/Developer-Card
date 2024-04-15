@@ -7,17 +7,14 @@ function ViewCards() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    const fetchCards = async () => {
+    async function fetchCards() {
       try {
-        const response = await axios.get("/api/cards");
-        // Ensure the response is an array before setting it to state
-        setCards(Array.isArray(response.data) ? response.data : []);
+        const response = await axios.get('http://localhost:5000/api/cards');
+        setCards(response.data);
       } catch (error) {
-        console.error("Error fetching cards:", error);
-        // Fallback to an empty array in case of error
-        setCards([]);
+        console.error('Failed to fetch cards:', error);
       }
-    };
+    }
 
     fetchCards();
   }, []);

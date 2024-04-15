@@ -25,6 +25,7 @@ const cardSchema = new Schema({
   role: String,
   interests: String,
   githubUsername: String,
+  profilePic: String,
   socialMedia: [{ name: String, link: String }],
 });
 
@@ -35,15 +36,17 @@ const Card = model("Card", cardSchema);
 app.use(json());
 
 // Route handler to add a new card
-app.post("/api/cards", async (req, res) => {
+app.post("/api/card", async (req, res) => {
   try {
-    const newCard = new Card(req.body);
-    const savedCard = await newCard.save();
-    res.status(201).json(savedCard);
+    const card = req.body; // Correctly get the full card data from the body
+    const newCard = await Card.create(card);
+    res.status(201).json(newCard);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error("Failed to create card:", err);
+    res.status(500).json({ message: "Failed to create card" });
   }
 });
+
 
 // Route handler to fetch all cards
 app.get("/api/cards", async (req, res) => {
